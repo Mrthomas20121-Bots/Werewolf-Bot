@@ -1,0 +1,16 @@
+{
+  "name": "discord-bot",
+  "version": "1.0.0",
+  "description": "By Mrthomas20121",
+  "main": "werewolf.js",
+  "scripts": {
+    "test": "Error"
+  },
+  "author": "Mrthomas20121",
+  "license": "ISC",
+  "dependencies": {
+    "discord.io": "^2.5.1",
+    "git": "^0.1.5",
+    "winston": "^2.3.1"
+  }
+}
