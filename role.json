@@ -1,0 +1,29 @@
+{
+	"werewolf" : {
+		"desc" : "Every night they pick one person to kill.\nIf they cannot decide in time they will not kill anyone."
+	},
+	"hunter" : {
+		"desc" : "he can kill someone upon dying"
+	},
+	"witch" : {
+		"desc" : "The witch knows who was killed by the werewolf, if she has her healing potion that is.\nIn that case she may heal the wounded person to save their life.\nShe also has a killing potion, allowing her to kill any person during nighttime.\nImportant to note: She may heal herself in advance to get an additional life."
+	},
+	"healer" : {
+		"desc" : "The Healer gets to heal 1 person every night.\nHowever, unlike the witch, he/she has no idea who was attacked."
+	},
+	"oracle" : {
+		"desc" : "At the start of the night the oracle gets to choose one person and i will tell the oracle their role."
+	},
+	"amor" : {
+		"desc" : "In the first night the Amor gets to choose two people.\n Those two players will fall in love and instantly start teaming up, no matter their roles.\nThe couple can only win if\n**1)** Both of the lovers are from the town: Every werewolf and the town has to die\n**2)** One of the lovers is a Werewolf: The entire town has to die\n**3)** Both lovers are Werewolves: The entire town and the Werewolves have to die."
+	},
+	"spy" : {
+		"desc" : "The spy gets to pretend to be a werewolf and joins their chat.\nHe gets to vote on the person who gets killed and his vote does count.\nHowever, as usual he may not reveal any roles, he may not hint at any roles and - most importantly - If the werewolves find out who he is, he dies Instantly.\nNot even the Witch/Healer can save him.\n Said death does not count as the killed person for the werewolves, meaning they may kill an additional person."
+	},
+	"lonewolf" : {
+		"desc" : "The lone wolf only wins if he is the last remaining werewolf.\nHe may not kill any of his fellow werewolves at night, but he may accuse them during daytime."
+	},
+	"villager" : {
+		"desc" : "The villager have nothing special"
+	}
+}
