@@ -158,13 +158,6 @@ if (message.startsWith(prefix)) {
 		});
 
 	}
-	else if (cmd == "add") {
-		if(event.d.mentions.length <=15) {
-			for(var i = 0; i<event.d.mentions.length; i++) {
-				usersID[i] = event.d.mentions[i].id;
-			}
-		}
-	}
 	else if(cmd == "role") {
 		if(args.length == 1){
 			bot.sendMessage({
@@ -247,6 +240,9 @@ if (message.startsWith(prefix)) {
 		}
 	}
 	else if(cmd == "start") {
+		for(var i = 0; i<event.d.mentions.length; i++) {
+			usersID[i] = event.d.mentions[i].id;
+		}
 		role = ["witch", "hunter", "villager", "werewolf", "oracle", "werewolf"];
 		if(usersID.length == 0) return;
 		else if(usersID.length == 21) {
