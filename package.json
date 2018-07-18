@@ -9,7 +9,8 @@
   "author": "Mrthomas20121",
   "license": "ISC",
   "dependencies": {
-    "discord.io": "^2.5.1",
+    "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+    "fs": "0.0.1-security",
     "git": "^0.1.5",
     "winston": "^2.3.1"
   }
