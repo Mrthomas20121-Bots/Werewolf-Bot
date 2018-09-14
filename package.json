@@ -4,7 +4,7 @@
   "description": "By Mrthomas20121",
   "main": "werewolf.js",
   "scripts": {
-    "test": "Error"
+    "test": "node ./werewolf.js"
   },
   "author": "Mrthomas20121",
   "license": "ISC",
@@ -12,6 +12,7 @@
     "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
     "fs": "0.0.1-security",
     "git": "^0.1.5",
+    "mime": "^1.4.1",
     "winston": "^2.3.1"
   }
 }
