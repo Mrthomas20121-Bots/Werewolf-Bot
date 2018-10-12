@@ -3,7 +3,7 @@
 		"desc" : "Every night they pick one person to kill.\nIf they cannot decide in time they will not kill anyone."
 	},
 	"hunter" : {
-		"desc" : "he can kill someone upon dying"
+		"desc" : "he may kill someone upon dying"
 	},
 	"witch" : {
 		"desc" : "The witch knows who was killed by the werewolf, if she has her healing potion that is.\nIn that case she may heal the wounded person to save their life.\nShe also has a killing potion, allowing her to kill any person during nighttime.\nImportant to note: She may heal herself in advance to get an additional life."

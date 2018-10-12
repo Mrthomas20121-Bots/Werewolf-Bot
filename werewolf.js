@@ -159,12 +159,12 @@ if (message.startsWith(prefix)) {
 					},
 					{
 						name : 'w:start',
-						value : 'start the game, if no players were added via w:add, nothing happend',
+						value : 'start the game with all players from the current lobby.',
 						inline : true
 					},
 					{
-						name : help.cmd[2].name,
-						value : help.cmd[2].desc,
+						name : 'w:add',
+						value : 'add players to lobby. use w:start to start the game',
 						inline : true
 					}
 				]
@@ -258,7 +258,6 @@ if (message.startsWith(prefix)) {
 		role = ['witch', 'hunter', 'villager', 'werewolf', 'oracle', 'werewolf'];
 		if(usersID.length == 0) return;
 		else if(usersID.length == 21) {
-			
 			role.push('lone wolf');
 			role.push('werewolf');
 			role.push('werewolf');
@@ -276,7 +275,6 @@ if (message.startsWith(prefix)) {
 			role.push('werewolf');
 		}
 		else if(usersID.length == 20) {
-			
 			role.push('lone wolf');
 			role.push('werewolf');
 			role.push('werewolf');
@@ -293,7 +291,6 @@ if (message.startsWith(prefix)) {
 			role.push('villager');
 		}
 		else if(usersID.length == 19) {
-			
 			role.push('lone wolf');
 			role.push('werewolf');
 			role.push('werewolf');
@@ -309,7 +306,6 @@ if (message.startsWith(prefix)) {
 			role.push('werewolf');
 		}
 		else if(usersID.length == 18) {
-			
 			role.push('lone wolf');
 			role.push('werewolf');
 			role.push('werewolf');
@@ -323,7 +319,6 @@ if (message.startsWith(prefix)) {
 			role.push('villager');
 		}
 		else if(usersID.length == 17) {
-			
 			role.push('lone wolf');
 			role.push('werewolf');
 			role.push('werewolf');
@@ -334,9 +329,9 @@ if (message.startsWith(prefix)) {
 			role.push('villager');
 			role.push('villager');
 			role.push('villager');
+			role.push('hunter');
 		}
 		else if(usersID.length == 16) {
-			// role = ['witch', 'hunter', 'villager', 'werewolf', 'oracle', 'werewolf', 'werewolf', 'werewolf', 'villager', 'spy', 'lone wolf', 'amor', 'werewolf', 'healer', 'villager'];
 			role.push('lone wolf');
 			role.push('werewolf');
 			role.push('werewolf');
@@ -346,9 +341,9 @@ if (message.startsWith(prefix)) {
 			role.push('healer');
 			role.push('villager');
 			role.push('villager');
+			role.push('hunter');
 		}
 		else if(usersID.length == 15) {
-			// role = ['witch', 'hunter', 'villager', 'werewolf', 'oracle', 'werewolf', 'werewolf', 'werewolf', 'villager', 'spy', 'lone wolf', 'amor', 'werewolf', 'healer', 'villager'];
 			role.push('lone wolf');
 			role.push('werewolf');
 			role.push('werewolf');
@@ -356,10 +351,20 @@ if (message.startsWith(prefix)) {
 			role.push('villager');
 			role.push('amor');
 			role.push('healer');
+			role.push('villager');
 			role.push('villager');
 		}
 		else if(usersID.length == 14) {
-			// role = ['witch', 'hunter', 'villager', 'werewolf', 'oracle', 'werewolf', 'werewolf', 'werewolf', 'villager', 'spy', 'lone wolf', 'amor', 'werewolf', 'healer'];
+			role.push('villager');
+			role.push('lone wolf');
+			role.push('werewolf');
+			role.push('werewolf');
+			role.push('spy');
+			role.push('villager');
+			role.push('amor');
+			role.push('healer');			
+		}
+		else if(usersID.length == 13) {
 			role.push('lone wolf');
 			role.push('werewolf');
 			role.push('werewolf');
@@ -369,7 +374,6 @@ if (message.startsWith(prefix)) {
 			role.push('healer');			
 		}
 		else if(usersID.length == 12) {
-			// role = ['witch', 'hunter', 'villager', 'werewolf', 'oracle', 'werewolf', 'werewolf', 'werewolf', 'villager', 'spy', 'lone wolf', 'amor'];
 			role.push('lone wolf');
 			role.push('werewolf');
 			role.push('werewolf');
@@ -378,7 +382,6 @@ if (message.startsWith(prefix)) {
 			role.push('amor');
 		}
 		else if(usersID.length == 11) {
-			// role = ['witch', 'hunter', 'villager', 'werewolf', 'oracle', 'werewolf', 'werewolf', 'werewolf', 'villager', 'spy', 'lone wolf'];
 			role.push('lone wolf');
 			role.push('werewolf');
 			role.push('werewolf');
@@ -386,20 +389,17 @@ if (message.startsWith(prefix)) {
 			role.push('villager');
 		}
 		else if(usersID.length == 10) {
-			// role = ['witch', 'hunter', 'villager', 'werewolf', 'oracle', 'werewolf', 'werewolf', 'werewolf', 'lone wolf', 'spy'];
 			role.push('lone wolf');
 			role.push('werewolf');
 			role.push('werewolf');
 			role.push('spy');
 		}
 		else if(usersID.length == 9) {
-			// role = ['witch', 'hunter', 'villager', 'werewolf', 'oracle', 'werewolf', 'lone wolf', 'werewolf', 'spy'];
 			role.push('lone wolf');
 			role.push('werewolf');
 			role.push('spy');
 		}
 		else if(usersID.length == 8) {
-			// role = ['witch', 'hunter', 'villager', 'werewolf', 'oracle', 'werewolf', 'lone wolf', 'werewolf'];
 			role.push('lone wolf');
 			role.push('werewolf');
 		}
