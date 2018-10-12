@@ -1,7 +1,7 @@
 module.exports = {
   killed: {
-    'werewolf': '{target} was killed by werewolf',
+    'werewolf': '{target} was killed by werewolves',
     'witch': '{target} was killed by the witch',
-    'guarding': '{target} died guarding someone'
+    'spy': '{target} was killed by werewolves, he was a spy'
   }
 }

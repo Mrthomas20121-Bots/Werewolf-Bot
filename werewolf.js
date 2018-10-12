@@ -32,7 +32,7 @@ const role_channels = {
 // 	dead: '334786229742731265',
 // }
 
-const prefix = 'w:';
+const prefix = 'w?';
 
 /**
  * Shuffles array in place. ES6 version
