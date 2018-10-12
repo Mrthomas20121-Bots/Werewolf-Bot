@@ -71,7 +71,7 @@ if (message.startsWith(prefix)) {
 	if(cmd == 'rules') {
 		bot.sendMessage({
 			to:channelID,
-			message:'Assemble a group of players. \nFor the first day, go around and have everyone introduce themselves \nDaytime is very simple; all the living players gather in the village and decide who to kill. As soon as a majority of players vote for a particular player to kill, the gamemaster(grabi) says \'Ok, you\'re dead.\'\nAt night the gamemaster tell you to sleep, then he ask oracle, then he ask werewolves who to kill'
+			message:'werewolf is game where you have to survive. there is various roles for you to get, and each role are unique.'
 		});
 	}
 	else if(cmd == 'vote') {
