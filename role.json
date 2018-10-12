@@ -24,6 +24,6 @@
 		"desc" : "The lone wolf only wins if he is the last remaining werewolf.\nHe may not kill any of his fellow werewolves at night, but he may accuse them during daytime."
 	},
 	"villager" : {
-		"desc" : "The villager have nothing special"
+		"desc" : "Just a villager."
 	}
 }

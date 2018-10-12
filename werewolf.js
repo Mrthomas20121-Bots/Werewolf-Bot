@@ -1,34 +1,38 @@
-var Discord = require('discord.io');
-var auth = require('./auth.json');
-var server = require('./server.json');
+const Discord = require('discord.io');
+const fs = require('fs');
+
+const auth = require('./auth.json');
+const server = require('./server.json');
 const help = require('./help.json');
 const roles = require('./role.json');
-var usersID = [];
-var role = [];
-const discordHelper = require('../helper/helper');
-
+let usersID = [];
+let role = [];
+let emotes = {
+	error:'<:error:444107855822454786>',
+	success: '<:success:emoteID>'
+}
 
 // on the werewolf server
 const role_channels = {
-	werewolves: "333348272846536705",
-	witch: "333348364991201281",
-	oracle: "333348394074374145",
-	amor: "333378742049046531",
-	love: "333379278538539009",
-	dead: "334786229742731265",
+	werewolves: '333348272846536705',
+	witch: '333348364991201281',
+	oracle: '333348394074374145',
+	amor: '333378742049046531',
+	love: '333379278538539009',
+	dead: '334786229742731265',
 }
 
 // on the test server
-// const role_channels = {
-// 	werewolves: "469223747606282241",
-// 	witch: "469223813498798090",
-// 	oracle: "469223859829211147",
-// 	amor: "333378742049046531",
-// 	love: "469223884772605952",
-// 	dead: "334786229742731265",
+// const test_role_channels = {
+// 	werewolves: '469223747606282241',
+// 	witch: '469223813498798090',
+// 	oracle: '469223859829211147',
+// 	amor: '333378742049046531',
+// 	love: '469223884772605952',
+// 	dead: '334786229742731265',
 // }
 
-const prefix = "w:";
+const prefix = 'w:';
 
 /**
  * Shuffles array in place. ES6 version
@@ -47,14 +51,14 @@ var bot = new Discord.Client({
    autorun: true
 });
 
-const helper = new discordHelper(bot);
+//const helper = new discordHelper(bot);
 
 bot.on('ready', function(event) {
     console.log('Logged in as %s - %s\n', bot.username, bot.id);
     bot.setPresence({
       game: {
-        name: "gamemaster | w:help",
-        type: "2",
+        name: 'gamemaster | w:help',
+        type: '2',
         url: null
       }
 		});
@@ -62,34 +66,44 @@ bot.on('ready', function(event) {
 
 bot.on('message', function (user, userID, channelID, message, event) {
 if (message.startsWith(prefix)) {
-	var args = message.slice(prefix.length).split(" ");
+	var args = message.slice(prefix.length).split(' ');
 	var cmd = args[0];
-	if(cmd == "rules") {
+	if(cmd == 'rules') {
 		bot.sendMessage({
 			to:channelID,
-			message:"Assemble a group of players. \nFor the first day, go around and have everyone introduce themselves \nDaytime is very simple; all the living players gather in the village and decide who to kill. As soon as a majority of players vote for a particular player to kill, the gamemaster(grabi) says 'Ok, you're dead.'\nAt night the gamemaster tell you to sleep, then he ask oracle, then he ask werewolves who to kill"
+			message:'Assemble a group of players. \nFor the first day, go around and have everyone introduce themselves \nDaytime is very simple; all the living players gather in the village and decide who to kill. As soon as a majority of players vote for a particular player to kill, the gamemaster(grabi) says \'Ok, you\'re dead.\'\nAt night the gamemaster tell you to sleep, then he ask oracle, then he ask werewolves who to kill'
 		});
 	}
-	else if(cmd == "perm") {
+	else if(cmd == 'vote') {
+		if(args.length > 0) {
+			let username = args[1];
+			for(const member of Object.values(bot.servers[server.serverID].members)) {
+				if(member.name = username) {
+					dead_user.push(member.id);
+				}
+			}
+		}
+	}
+	else if(cmd == 'perm') {
 		
 		bot.editChannelPermissions({
 			channelID:channelID,
-			userID:"408569903000453120",
+			userID:'408569903000453120',
 			deny:[Discord.Permissions.TEXT_SEND_MESSAGES, Discord.Permissions.TEXT_READ_MESSAGES, Discord.Permissions.TEXT_READ_MESSAGE_HISTORY, Discord.Permissions.TEXT_ADD_REACTIONS]
 		}, (err) => {
 			if(err) throw err;
 		});
 	}
-	else if(cmd == "dead") {
+	else if(cmd == 'dead') {
 		if (event.d.mentions.length == 1)  {
 		bot.addToRole({
-		serverID: server.serverID,
-		userID: event.d.mentions[0].id,
-		roleID: "335458298369146891"
+			serverID: server.serverID,
+			userID: event.d.mentions[0].id,
+			roleID: '335458298369146891'
 		}),
 		bot.sendMessage({
-						to: channelID,
-						message: event.d.mentions[0].username + ' was killed'
+				to: channelID,
+				message: event.d.mentions[0].username + ' was killed'
 			});
 		}
 	}
@@ -101,7 +115,7 @@ if (message.startsWith(prefix)) {
 				bot.removeFromRole({
 					serverID: server.serverID,
 					userID: event.d.mentions[i].id,
-					roleID: "333352501258485760"
+					roleID: '333352501258485760'
 				});
 			}
 			else {
@@ -109,7 +123,7 @@ if (message.startsWith(prefix)) {
 					bot.removeFromRole({
 						serverID: server.serverID,
 						userID: event.d.mentions[i].id,
-						roleID: "333352501258485760"
+						roleID: '333352501258485760'
 					});
 				}
 			}
@@ -117,7 +131,7 @@ if (message.startsWith(prefix)) {
 		else {
 			bot.sendMessage({
 				to:channelID,
-				message:"<:error:444107855822454786> you don't have permission to use this command"
+				message:`${emotes.error} you don\'t have permission to use this command`
 			}, (err, res) => {
 				if(err) {
 					throw err;
@@ -131,21 +145,21 @@ if (message.startsWith(prefix)) {
 			});
 		}
 	}
-	else if(cmd == "help") {
+	else if(cmd == 'help') {
 		bot.sendMessage({
 			to: channelID,
 			embed: {
-				title: "Help",
+				title: 'Help',
 				color: 0x00b4fa,
 				fields: [
 					{
-						name : "w:rules",
-						value : "show you the game rules",
+						name : 'w:rules',
+						value : 'show you the rules',
 						inline : true
 					},
 					{
-						name : "w:start",
-						value : "start the game, if no players were added via w:add, nothing happend",
+						name : 'w:start',
+						value : 'start the game, if no players were added via w:add, nothing happend',
 						inline : true
 					},
 					{
@@ -158,13 +172,13 @@ if (message.startsWith(prefix)) {
 		});
 
 	}
-	else if(cmd == "role") {
+	else if(cmd == 'role') {
 		if(args.length == 1){
 			bot.sendMessage({
 				to: channelID,
 				embed: {
-					title: "Roles",
-					description : "",
+					title: 'Roles',
+					description : '',
 					color: 0x00b4fa,
 					fields: [
 						{
@@ -216,7 +230,7 @@ if (message.startsWith(prefix)) {
 				}             
 			});
 		}
-		else if(typeof roles[args[1]] !== "undefined") {
+		else if(typeof roles[args[1]] !== 'undefined') {
 			bot.sendMessage({
 				to:channelID,
 				message:`**${args[1].toUpperCase()} :** \n${roles[args[1]].desc}`
@@ -227,9 +241,7 @@ if (message.startsWith(prefix)) {
 				to:channelID,
 				message:`<:error:444107855822454786> ${args[1]} is not a valid role. use w:role *without args* to see all roles`
 			}, (err, res) => {
-				if(err) {
-					throw err;
-				}
+				if(err) throw err;
 				setTimeout(() => {
 					bot.deleteMessage({
 						channelID:channelID,
@@ -239,11 +251,11 @@ if (message.startsWith(prefix)) {
 			});
 		}
 	}
-	else if(cmd == "start") {
+	else if(cmd == 'start') {
 		for(var i = 0; i<event.d.mentions.length; i++) {
 			usersID[i] = event.d.mentions[i].id;
 		}
-		role = ["witch", "hunter", "villager", "werewolf", "oracle", "werewolf"];
+		role = ['witch', 'hunter', 'villager', 'werewolf', 'oracle', 'werewolf'];
 		if(usersID.length == 0) return;
 		else if(usersID.length == 21) {
 			
@@ -251,12 +263,14 @@ if (message.startsWith(prefix)) {
 			role.push('werewolf');
 			role.push('werewolf');
 			role.push('spy');
-			role.push('villager');
+			role.push('hunter');
 			role.push('amor');
 			role.push('healer');
 			role.push('villager');
 			role.push('villager');
 			role.push('werewolf');
+			role.push('villager');
+			role.push('villager');
 			role.push('villager');
 			role.push('villager');
 			role.push('werewolf');
@@ -273,6 +287,7 @@ if (message.startsWith(prefix)) {
 			role.push('villager');
 			role.push('villager');
 			role.push('werewolf');
+			role.push('hunter');
 			role.push('villager');
 			role.push('villager');
 			role.push('villager');
@@ -289,8 +304,9 @@ if (message.startsWith(prefix)) {
 			role.push('villager');
 			role.push('villager');
 			role.push('werewolf');
+			role.push('hunter');
 			role.push('villager');
-			role.push('villager');
+			role.push('werewolf');
 		}
 		else if(usersID.length == 18) {
 			
@@ -320,7 +336,7 @@ if (message.startsWith(prefix)) {
 			role.push('villager');
 		}
 		else if(usersID.length == 16) {
-			// role = ["witch", "hunter", "villager", "werewolf", "oracle", "werewolf", "werewolf", "werewolf", "villager", "spy", "lone wolf", "amor", "werewolf", "healer", "villager"];
+			// role = ['witch', 'hunter', 'villager', 'werewolf', 'oracle', 'werewolf', 'werewolf', 'werewolf', 'villager', 'spy', 'lone wolf', 'amor', 'werewolf', 'healer', 'villager'];
 			role.push('lone wolf');
 			role.push('werewolf');
 			role.push('werewolf');
@@ -332,7 +348,7 @@ if (message.startsWith(prefix)) {
 			role.push('villager');
 		}
 		else if(usersID.length == 15) {
-			// role = ["witch", "hunter", "villager", "werewolf", "oracle", "werewolf", "werewolf", "werewolf", "villager", "spy", "lone wolf", "amor", "werewolf", "healer", "villager"];
+			// role = ['witch', 'hunter', 'villager', 'werewolf', 'oracle', 'werewolf', 'werewolf', 'werewolf', 'villager', 'spy', 'lone wolf', 'amor', 'werewolf', 'healer', 'villager'];
 			role.push('lone wolf');
 			role.push('werewolf');
 			role.push('werewolf');
@@ -343,7 +359,7 @@ if (message.startsWith(prefix)) {
 			role.push('villager');
 		}
 		else if(usersID.length == 14) {
-			// role = ["witch", "hunter", "villager", "werewolf", "oracle", "werewolf", "werewolf", "werewolf", "villager", "spy", "lone wolf", "amor", "werewolf", "healer"];
+			// role = ['witch', 'hunter', 'villager', 'werewolf', 'oracle', 'werewolf', 'werewolf', 'werewolf', 'villager', 'spy', 'lone wolf', 'amor', 'werewolf', 'healer'];
 			role.push('lone wolf');
 			role.push('werewolf');
 			role.push('werewolf');
@@ -353,7 +369,7 @@ if (message.startsWith(prefix)) {
 			role.push('healer');			
 		}
 		else if(usersID.length == 12) {
-			// role = ["witch", "hunter", "villager", "werewolf", "oracle", "werewolf", "werewolf", "werewolf", "villager", "spy", "lone wolf", "amor"];
+			// role = ['witch', 'hunter', 'villager', 'werewolf', 'oracle', 'werewolf', 'werewolf', 'werewolf', 'villager', 'spy', 'lone wolf', 'amor'];
 			role.push('lone wolf');
 			role.push('werewolf');
 			role.push('werewolf');
@@ -362,7 +378,7 @@ if (message.startsWith(prefix)) {
 			role.push('amor');
 		}
 		else if(usersID.length == 11) {
-			// role = ["witch", "hunter", "villager", "werewolf", "oracle", "werewolf", "werewolf", "werewolf", "villager", "spy", "lone wolf"];
+			// role = ['witch', 'hunter', 'villager', 'werewolf', 'oracle', 'werewolf', 'werewolf', 'werewolf', 'villager', 'spy', 'lone wolf'];
 			role.push('lone wolf');
 			role.push('werewolf');
 			role.push('werewolf');
@@ -370,20 +386,20 @@ if (message.startsWith(prefix)) {
 			role.push('villager');
 		}
 		else if(usersID.length == 10) {
-			// role = ["witch", "hunter", "villager", "werewolf", "oracle", "werewolf", "werewolf", "werewolf", "lone wolf", "spy"];
+			// role = ['witch', 'hunter', 'villager', 'werewolf', 'oracle', 'werewolf', 'werewolf', 'werewolf', 'lone wolf', 'spy'];
 			role.push('lone wolf');
 			role.push('werewolf');
 			role.push('werewolf');
 			role.push('spy');
 		}
 		else if(usersID.length == 9) {
-			// role = ["witch", "hunter", "villager", "werewolf", "oracle", "werewolf", "lone wolf", "werewolf", "spy"];
+			// role = ['witch', 'hunter', 'villager', 'werewolf', 'oracle', 'werewolf', 'lone wolf', 'werewolf', 'spy'];
 			role.push('lone wolf');
 			role.push('werewolf');
 			role.push('spy');
 		}
 		else if(usersID.length == 8) {
-			// role = ["witch", "hunter", "villager", "werewolf", "oracle", "werewolf", "lone wolf", "werewolf"];
+			// role = ['witch', 'hunter', 'villager', 'werewolf', 'oracle', 'werewolf', 'lone wolf', 'werewolf'];
 			role.push('lone wolf');
 			role.push('werewolf');
 		}
@@ -391,23 +407,31 @@ if (message.startsWith(prefix)) {
 			role.push('lone wolf');
 		}
 		else if(usersID.length == 6) {
-			role = ["witch", "hunter", "villager", "werewolf", "oracle", "werewolf"];
+			role = ['witch', 'hunter', 'villager', 'werewolf', 'oracle', 'werewolf'];
 		}
 		// console.log(shuffle(role));
 		let r = shuffle(role);
 		
-		let val = "";
-		let grabiID = "198780988959096832";
-
+		let val = '';
+		let grabiID = '198780988959096832';
+		let obj = [];
 		for(let i = 0; i<r.length; i++) {
 			bot.sendMessage({
 				to: usersID[i],
 				message: `Your (new)role is : ${r[i]}\nthis is your role. \ndon't tell anyone what your role is.`
 			});
+
+			obj.push({
+				user: usersID[i],
+				role: r[i]
+			});
+
+			fs.writeFileSync('./werewolf_data.json', JSON.stringify(obj));
+
 			switch(r[i]) {
-				case "werewolf":
-				case "spy":
-				case "lone wolf":
+				case 'werewolf':
+				case 'spy':
+				case 'lone wolf':
 				bot.editChannelPermissions({
 					channelID:role_channels.werewolves,
 					userID: usersID[i],
@@ -416,7 +440,7 @@ if (message.startsWith(prefix)) {
 					if(err) throw err;
 				});
 				break;
-				case "witch":
+				case 'witch':
 				bot.editChannelPermissions({
 					channelID:role_channels.witch,
 					userID: usersID[i],
@@ -425,7 +449,7 @@ if (message.startsWith(prefix)) {
 					if(err) throw err;
 				});
 				break;
-				case "oracle":
+				case 'oracle':
 				bot.editChannelPermissions({
 					channelID:role_channels.oracle,
 					userID: usersID[i],
@@ -434,10 +458,10 @@ if (message.startsWith(prefix)) {
 					if(err) throw err;
 				});
 				break;
-				case "hunter":
+				case 'hunter':
 
 				break;
-				case "amor":
+				case 'amor':
 				bot.editChannelPermissions({
 					channelID:role_channels.amor,
 					userID: usersID[i],
@@ -446,8 +470,8 @@ if (message.startsWith(prefix)) {
 					if(err) throw err;
 				});
 				break;
-				case "healer":
-				case "villager":
+				case 'healer':
+				case 'villager':
 				default:
 				// it's a villager or healer
 				break;
@@ -459,9 +483,8 @@ if (message.startsWith(prefix)) {
 			to:grabiID,
 			message:val
 		});
-
 	}
-	}
+}
 	
 });
 

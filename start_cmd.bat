@@ -1,3 +1,4 @@
 @echo off
 title werewolf bot
-cmd
+node werewolf
+pause
