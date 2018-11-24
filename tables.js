@@ -31,4 +31,4 @@ var roles_rows = [
   },
 ]
 
-createTable('roles', roles_rows)
+console.log(createTable('roles', roles_rows))

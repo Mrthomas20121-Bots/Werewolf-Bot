@@ -5,12 +5,14 @@ const auth = require('./auth.json');
 const server = require('./server.json');
 const help = require('./help.json');
 const roles = require('./role.json');
-let usersID = [];
-let role = [];
-let emotes = {
+var usersID = [];
+var role = [];
+var emotes = {
 	error:'<:error:444107855822454786>',
 	success: '<:success:emoteID>'
 }
+var dead_users = [];
+var dead = "";
 
 // on the werewolf server
 const role_channels = {
@@ -20,6 +22,7 @@ const role_channels = {
 	amor: '333378742049046531',
 	love: '333379278538539009',
 	dead: '334786229742731265',
+	daytime: '3333890890813'
 }
 
 // on the test server
@@ -37,6 +40,7 @@ const prefix = 'w?';
 /**
  * Shuffles array in place. ES6 version
  * @param {Array} a An array containing items.
+ * @return {Array}
  */
 function shuffle(a) {
   for (let i = a.length - 1; i > 0; i--) {
@@ -46,22 +50,32 @@ function shuffle(a) {
   return a;
 }
 // Initialize Discord Bot
-var bot = new Discord.Client({
+const bot = new Discord.Client({
    token: auth.token,
    autorun: true
 });
 
-//const helper = new discordHelper(bot);
-
 bot.on('ready', function(event) {
+		// send a message in the chat when the bot is ready
     console.log('Logged in as %s - %s\n', bot.username, bot.id);
     bot.setPresence({
       game: {
         name: 'gamemaster | w:help',
-        type: '2',
+        type: '2', // type '2' is listenning to
         url: null
       }
 		});
+		dead_users = [];
+		setInterval(() => {
+			if(usersID.length < 0 && dead_users.length < 0) {
+				for (const dead of dead_users) {
+					bot.sendMessage({
+						to:role_channels.daytime,
+						message:`${bot.servers[serverID].members[dead]}`
+					})	
+				}
+			}
+		}, 5000);
 });
 
 bot.on('message', function (user, userID, channelID, message, event) {
@@ -75,12 +89,26 @@ if (message.startsWith(prefix)) {
 		});
 	}
 	else if(cmd == 'vote') {
+		// werewolf decide who they want to kill
 		if(args.length > 0) {
 			let username = args[1];
-			for(const member of Object.values(bot.servers[server.serverID].members)) {
-				if(member.name = username) {
-					dead_user.push(member.id);
-				}
+			const u = Object.values(bot.servers[server.serverID].members);
+			const obj = u.find((u) => u.username === username);
+			// when the user is dead
+			// add its id to the dead_users array 
+			dead_users.push(obj.id);
+			dead = obj.id;
+			// add the dead role to the new dead player
+			bot.addToRole({
+				serverID: server.serverID,
+				userID: obj.id,
+				roleID: '335458298369146891'
+			});
+
+			bot.sendMessage({
+					to: channelID,
+					message: `${obj.username} was killed last night.`
+				});
 			}
 		}
 	}
@@ -100,7 +128,7 @@ if (message.startsWith(prefix)) {
 			serverID: server.serverID,
 			userID: event.d.mentions[0].id,
 			roleID: '335458298369146891'
-		}),
+		});
 		bot.sendMessage({
 				to: channelID,
 				message: event.d.mentions[0].username + ' was killed'
