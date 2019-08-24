@@ -1,8 +1,8 @@
 {
 	"cmd" : [
 			{
-				"name" : "command rule",
-				"desc" : "show the gamerules. and how to play"
+				"name" : "gameInfo howToPlay",
+				"desc" : "Tell you information about the game"
 			},
 			{
 				"name" : "command start",
