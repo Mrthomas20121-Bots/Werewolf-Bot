@@ -1,10 +1,9 @@
 const Discord = require('discord.io');
 const fs = require('fs');
-
 const auth = require('./auth.json');
 const server = require('./server.json');
-const help = require('./help.json');
-const roles = require('./role.json');
+const roles = require('./role/role.json');
+
 var usersID = [];
 var role = [];
 var emotes = {
@@ -13,7 +12,7 @@ var emotes = {
 }
 var dead_users = [];
 var dead = "";
-
+let daytime = false;
 // on the werewolf server
 const role_channels = {
 	werewolves: '333348272846536705',
@@ -35,13 +34,13 @@ const role_channels = {
 // 	dead: '334786229742731265',
 // }
 
-const prefix = 'w?';
+const prefix = 'ww?';
 
 /**
  * Shuffles array in place. ES6 version
  * @param {Array} a An array containing items.
  * @return {Array}
- */
+ */                    
 function shuffle(a) {
   for (let i = a.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -60,22 +59,19 @@ bot.on('ready', function(event) {
     console.log('Logged in as %s - %s\n', bot.username, bot.id);
     bot.setPresence({
       game: {
-        name: 'gamemaster | w:help',
+        name: `gamemaster | ${prefix}help`,
         type: '2', // type '2' is listenning to
         url: null
       }
 		});
-		dead_users = [];
 		setInterval(() => {
-			if(usersID.length < 0 && dead_users.length < 0) {
-				for (const dead of dead_users) {
-					bot.sendMessage({
-						to:role_channels.daytime,
-						message:`${bot.servers[serverID].members[dead]}`
-					})	
-				}
+			if(daytime == true) {
+				bot.sendMessage({
+					to: channelID,
+					message: `${obj.username} was killed last night.`
+				});
 			}
-		}, 5000);
+		}, 500);
 });
 
 bot.on('message', function (user, userID, channelID, message, event) {
@@ -104,16 +100,10 @@ if (message.startsWith(prefix)) {
 				userID: obj.id,
 				roleID: '335458298369146891'
 			});
-
-			bot.sendMessage({
-					to: channelID,
-					message: `${obj.username} was killed last night.`
-				});
-			}
 		}
 	}
-	else if(cmd == 'perm') {
-		
+	else if(cmd == 'test') {
+		// test the bot perm
 		bot.editChannelPermissions({
 			channelID:channelID,
 			userID:'408569903000453120',
@@ -181,18 +171,23 @@ if (message.startsWith(prefix)) {
 				color: 0x00b4fa,
 				fields: [
 					{
-						name : 'w:rules',
+						name : `${prefix}rules`,
 						value : 'show you the rules',
 						inline : true
 					},
 					{
-						name : 'w:start',
+						name : `${prefix}start`,
 						value : 'start the game with all players from the current lobby.',
 						inline : true
 					},
 					{
-						name : 'w:add',
-						value : 'add players to lobby. use w:start to start the game',
+						name : `${prefix}add`,
+						value : `add players to lobby. use ${prefix}start to start the game`,
+						inline : true
+					},
+					{
+						name : `${prefix}role`,
+						value : `show you the availaible roles. use ${prefix}role <role> to get info about a specific role.`,
 						inline : true
 					}
 				]
@@ -267,7 +262,7 @@ if (message.startsWith(prefix)) {
 		else {
 			bot.sendMessage({
 				to:channelID,
-				message:`<:error:444107855822454786> ${args[1]} is not a valid role. use w:role *without args* to see all roles`
+				message:`<:error:444107855822454786> ${args[1]} is not a valid role. use ${prefix}role *without args* to see all roles`
 			}, (err, res) => {
 				if(err) throw err;
 				setTimeout(() => {
