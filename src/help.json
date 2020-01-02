@@ -1,0 +1,16 @@
+{
+	"cmd" : [
+			{
+				"name" : "gameInfo howToPlay",
+				"desc" : "Tell you information about the game"
+			},
+			{
+				"name" : "command start",
+				"desc" : "start game.\nrequire __w:add__ to work"
+			},
+			{
+				"name" : "command add",
+				"desc" : "add player to lobby.__w:start__ will start the game with the players added by this command"
+			}
+	]
+}
