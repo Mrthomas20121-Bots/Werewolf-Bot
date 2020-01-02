@@ -8,7 +8,7 @@ const server = require('./server.json');
 // command and their description
 const help = require('./help.json');
 // role and their description.
-const roles = require('./role.json');
+const roles = require('./role/role.json');
 
 // array of userID
 let usersID = [];
@@ -47,7 +47,7 @@ const role_channels = {
 // 	dead: '334786229742731265',
 // }
 
-const prefix = 'ww?';
+const prefix = 'w?';
 
 /**
  * Shuffles array in place. ES6 version
@@ -72,7 +72,7 @@ bot.on('ready', function(event) {
     console.log('Logged in as %s - %s\n', bot.username, bot.id);
     bot.setPresence({
       game: {
-        name: `gamemaster | ${prefix}help`,
+        name: `the sound of silence || ${prefix}help`,
         type: '2', // type '2' is listenning to
         url: null // not setting a url
       }
@@ -84,12 +84,12 @@ bot.on('ready', function(event) {
 					for (const dead of dead_users) {
 						bot.sendMessage({
 							to:role_channels.daytime,
-							message:`${bot.servers[serverID].members[dead]}`
+							message:`${bot.servers[serverID].members[dead]} was killed last night`
 						});
 					}
 				}
 			}
-		}, 500);
+		}, 5000);
 });
 
 // message listenner
@@ -98,11 +98,11 @@ if (message.startsWith(prefix)) {
 	let args = message.slice(prefix.length).split(' ');
 	let command = args[0];
 
-	if(command == 'gameInfo') {
-		if(args[1] == 'howToPlay') {
+	if(command == help.commands.howto.args[0]) {
+		if(args[1] == help.commands.howto.args[1]) {
 			bot.sendMessage({
 				to:channelID,
-				message:'At the start of the game, each player is secretly assigned a role affiliated with one of these teams. The game has two alternating phases: one, during which the werewolves may covertly "murder" an innocent, and two, in which surviving players debate the identities of the werewolves and vote to eliminate a suspect. The game continues until all of the werewolves have been eliminated or until the werewolves outnumber the innocents.'
+				message:help.howto.text
 			});
 		}
 	}
@@ -198,18 +198,18 @@ if (message.startsWith(prefix)) {
 				color: 0x00b4fa,
 				fields: [
 					{
-						name : `${prefix}rules`,
-						value : 'show you the rules',
+						name : `${prefix}howto play`,
+						value : help.commands.howto.desc,
 						inline : true
 					},
 					{
 						name : `${prefix}start`,
-						value : 'start the game with all players from the current lobby.',
+						value : help.commands.start.desc,
 						inline : true
 					},
 					{
 						name : `${prefix}add`,
-						value : `add players to lobby. use ${prefix}start to start the game`,
+						value : help.commands.add.desc.replace("${prefix}", prefix),
 						inline : true
 					},
 					{

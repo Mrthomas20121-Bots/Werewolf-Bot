@@ -1,16 +1,17 @@
 {
-	"cmd" : [
-			{
-				"name" : "gameInfo howToPlay",
-				"desc" : "Tell you information about the game"
-			},
-			{
-				"name" : "command start",
-				"desc" : "start game.\nrequire __w:add__ to work"
-			},
-			{
-				"name" : "command add",
-				"desc" : "add player to lobby.__w:start__ will start the game with the players added by this command"
-			}
-	]
+	"commands" : {
+		"howto": {
+			"args": ["howto", "play"],
+			"desc": "Show you how to play a game of werewolf.",
+			"text": "At the start of the game, each player is secretly assigned a role affiliated with one of these teams. \nThe game has two alternating phases: \"Night\", during which each player sleep while players with a role do stuff and \"Day\", in which surviving players debate the identities of the werewolves and vote to eliminate a suspect. \nThe game continues until all of the werewolves have been eliminated or until the werewolves outnumber the innocents."
+		},
+		"start": {
+			"name": "start",
+			"desc": "Start a game of werewolf."
+		},
+		"add": {
+			"name": "add",
+			"desc": "Add player to a new werewolf game. \nUse ${prefix}start command to start a game of werewolf."
+		}
+	}
 }
