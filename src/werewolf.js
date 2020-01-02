@@ -1,18 +1,31 @@
 const Discord = require('discord.io');
 const fs = require('fs');
-const auth = require('./auth.json');
-const server = require('./server.json');
-const roles = require('./role/role.json');
 
-var usersID = [];
-var role = [];
-var emotes = {
+// file used to auth the bot, contain the bot token
+const auth = require('./auth.json');
+// info about the server
+const server = require('./server.json');
+// command and their description
+const help = require('./help.json');
+// role and their description.
+const roles = require('./role.json');
+
+// array of userID
+let usersID = [];
+// role array
+let role = [];
+// emotes used by the bot, mostly error and success emotes.
+let emotes = {
 	error:'<:error:444107855822454786>',
-	success: '<:success:emoteID>'
+	success: '<:checkmark:444107855986032660>'
 }
-var dead_users = [];
-var dead = "";
-let daytime = false;
+// dead users array, it's used to tell the bot which users died in the game.
+let dead_users = [];
+
+// daytime variable, used to determine if it's daytime or not
+let daytime = true;
+
+// channelID of the differents roles
 // on the werewolf server
 const role_channels = {
 	werewolves: '333348272846536705',
@@ -61,49 +74,63 @@ bot.on('ready', function(event) {
       game: {
         name: `gamemaster | ${prefix}help`,
         type: '2', // type '2' is listenning to
-        url: null
+        url: null // not setting a url
       }
 		});
+		// check every 5s if there anyone dead.
 		setInterval(() => {
-			if(daytime == true) {
-				bot.sendMessage({
-					to: channelID,
-					message: `${obj.username} was killed last night.`
-				});
+			if(usersID.length < 0 && dead_users.length < 0) {
+				if(daytime == true) {
+					for (const dead of dead_users) {
+						bot.sendMessage({
+							to:role_channels.daytime,
+							message:`${bot.servers[serverID].members[dead]}`
+						});
+					}
+				}
 			}
 		}, 500);
 });
 
+// message listenner
 bot.on('message', function (user, userID, channelID, message, event) {
 if (message.startsWith(prefix)) {
-	var args = message.slice(prefix.length).split(' ');
-	var cmd = args[0];
-	if(cmd == 'rules') {
-		bot.sendMessage({
-			to:channelID,
-			message:'werewolf is game where you have to survive. there is various roles for you to get, and each role are unique.'
-		});
-	}
-	else if(cmd == 'vote') {
-		// werewolf decide who they want to kill
-		if(args.length > 0) {
-			let username = args[1];
-			const u = Object.values(bot.servers[server.serverID].members);
-			const obj = u.find((u) => u.username === username);
-			// when the user is dead
-			// add its id to the dead_users array 
-			dead_users.push(obj.id);
-			dead = obj.id;
-			// add the dead role to the new dead player
-			bot.addToRole({
-				serverID: server.serverID,
-				userID: obj.id,
-				roleID: '335458298369146891'
+	let args = message.slice(prefix.length).split(' ');
+	let command = args[0];
+
+	if(command == 'gameInfo') {
+		if(args[1] == 'howToPlay') {
+			bot.sendMessage({
+				to:channelID,
+				message:'At the start of the game, each player is secretly assigned a role affiliated with one of these teams. The game has two alternating phases: one, during which the werewolves may covertly "murder" an innocent, and two, in which surviving players debate the identities of the werewolves and vote to eliminate a suspect. The game continues until all of the werewolves have been eliminated or until the werewolves outnumber the innocents.'
 			});
 		}
 	}
-	else if(cmd == 'test') {
-		// test the bot perm
+	else if(command == 'voteAtNight') {
+		// werewolf decide who they want to kill
+	if(args.length > 0) {
+		let username = args[1];
+		const u = Object.values(bot.servers[server.serverID].members);
+		const obj = u.find((u) => u.username === username);
+		// when the user is dead
+		// add its id to the dead_users array 
+		dead_users.push(obj.id);
+		dead = obj.id;
+		// add the dead role to the new dead player
+		bot.addToRole({
+			serverID: server.serverID,
+			userID: obj.id,
+			roleID: '335458298369146891'
+		});
+
+		bot.sendMessage({
+				to: channelID,
+				message: `${obj.username} was killed last night.`
+			});
+		}
+	}
+	else if(command == 'perm') {
+		
 		bot.editChannelPermissions({
 			channelID:channelID,
 			userID:'408569903000453120',
@@ -112,7 +139,7 @@ if (message.startsWith(prefix)) {
 			if(err) throw err;
 		});
 	}
-	else if(cmd == 'dead') {
+	else if(command == 'dead') {
 		if (event.d.mentions.length == 1)  {
 		bot.addToRole({
 			serverID: server.serverID,
@@ -125,7 +152,7 @@ if (message.startsWith(prefix)) {
 			});
 		}
 	}
-	else if(cmd == 'reset') {
+	else if(command == 'reset') {
 		let role = '333353928643313664';
 		if (bot.servers[bot.channels[channelID].guild_id].members[userID].roles.includes(role)){
 			if(event.d.mentions.length == 0) return;
@@ -163,7 +190,7 @@ if (message.startsWith(prefix)) {
 			});
 		}
 	}
-	else if(cmd == 'help') {
+	else if(command == 'help') {
 		bot.sendMessage({
 			to: channelID,
 			embed: {
@@ -195,7 +222,7 @@ if (message.startsWith(prefix)) {
 		});
 
 	}
-	else if(cmd == 'role') {
+	else if(command == 'role') {
 		if(args.length == 1){
 			bot.sendMessage({
 				to: channelID,
@@ -274,7 +301,7 @@ if (message.startsWith(prefix)) {
 			});
 		}
 	}
-	else if(cmd == 'start') {
+	else if(command == 'start') {
 		for(var i = 0; i<event.d.mentions.length; i++) {
 			usersID[i] = event.d.mentions[i].id;
 		}
@@ -433,25 +460,25 @@ if (message.startsWith(prefix)) {
 			role = ['witch', 'hunter', 'villager', 'werewolf', 'oracle', 'werewolf'];
 		}
 		// console.log(shuffle(role));
-		let r = shuffle(role);
+		let shuffledRoles = shuffle(role);
 		
 		let val = '';
 		let grabiID = '198780988959096832';
 		let obj = [];
-		for(let i = 0; i<r.length; i++) {
+		for(let i = 0; i<shuffledRoles.length; i++) {
 			bot.sendMessage({
 				to: usersID[i],
-				message: `Your (new)role is : ${r[i]}\nthis is your role. \ndon't tell anyone what your role is.`
+				message: `Your (new)role is : ${shuffledRoles[i]}\ndon't tell anyone what your role is.`
 			});
 
 			obj.push({
 				user: usersID[i],
-				role: r[i]
+				role: shuffledRoles[i]
 			});
 
 			fs.writeFileSync('./werewolf_data.json', JSON.stringify(obj));
 
-			switch(r[i]) {
+			switch(shuffledRoles[i]) {
 				case 'werewolf':
 				case 'spy':
 				case 'lone wolf':
@@ -502,13 +529,12 @@ if (message.startsWith(prefix)) {
 			let u = usersID[i];
 			val+=`${bot.users[u].username} : ${r[i]}\n`
 		}
-		bot.sendMessage({
-			to:grabiID,
-			message:val
-		});
+			bot.sendMessage({
+				to:grabiID,
+				message:val
+			});
+		}
 	}
-}
-	
 });
 
 bot.on('disconnect', function(errMsg, code) {
