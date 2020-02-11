@@ -1,4 +1,6 @@
 const Discord = require('discord.io');
+const Sweetcord = require('sweetcord');
+const hex_random = require('./hex_random');
 const fs = require('fs');
 
 // file used to auth the bot, contain the bot token
@@ -62,9 +64,9 @@ function shuffle(a) {
   return a;
 }
 // Initialize Discord Bot
-const bot = new Discord.Client({
-   token: auth.token,
-   autorun: true
+const bot = new Sweetcord.SweetClient({
+	token: auth.token,
+	autorun: true
 });
 
 bot.on('ready', function(event) {
@@ -102,7 +104,7 @@ if (message.startsWith(prefix)) {
 		if(args[1] == help.commands.howto.args[1]) {
 			bot.sendMessage({
 				to:channelID,
-				message:help.howto.text
+				message:help.commands.howto.text
 			});
 		}
 	}
