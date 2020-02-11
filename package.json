@@ -1,6 +1,6 @@
 {
   "name": "werewolf",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "By Mrthomas20121",
   "main": "werewolf.js",
   "scripts": {
@@ -13,7 +13,7 @@
     "fs": "0.0.1-security",
     "git": "^0.1.5",
     "mime": "^1.4.1",
-    "sweetcord": "^1.0.0",
+    "sweetcord": "^1.0.4",
     "winston": "^2.3.1"
   }
 }
