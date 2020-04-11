@@ -1,6 +1,7 @@
-const Discord = require('discord.io');
+const shuffle = require('./helpers/shuffle');
 const Sweetcord = require('sweetcord');
 const hex_random = require('./hex_random');
+const config = require('./config/config');
 const fs = require('fs');
 
 // file used to auth the bot, contain the bot token
@@ -27,42 +28,6 @@ let dead_users = [];
 // daytime variable, used to determine if it's daytime or not
 let daytime = true;
 
-// channelID of the differents roles
-// on the werewolf server
-const role_channels = {
-	werewolves: '333348272846536705',
-	witch: '333348364991201281',
-	oracle: '333348394074374145',
-	amor: '333378742049046531',
-	love: '333379278538539009',
-	dead: '334786229742731265',
-	daytime: '3333890890813'
-}
-
-// on the test server
-// const test_role_channels = {
-// 	werewolves: '469223747606282241',
-// 	witch: '469223813498798090',
-// 	oracle: '469223859829211147',
-// 	amor: '333378742049046531',
-// 	love: '469223884772605952',
-// 	dead: '334786229742731265',
-// }
-
-const prefix = 'w?';
-
-/**
- * Shuffles array in place. ES6 version
- * @param {Array} a An array containing items.
- * @return {Array}
- */                    
-function shuffle(a) {
-  for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
 // Initialize Discord Bot
 const bot = new Sweetcord.SweetClient({
 	token: auth.token,
@@ -74,7 +39,7 @@ bot.on('ready', function(event) {
     console.log('Logged in as %s - %s\n', bot.username, bot.id);
     bot.setPresence({
       game: {
-        name: `the sound of silence || ${prefix}help`,
+        name: `the sound of silence || ${config.prefix}help`,
         type: '2', // type '2' is listenning to
         url: null // not setting a url
       }
@@ -85,7 +50,7 @@ bot.on('ready', function(event) {
 				if(daytime == true) {
 					for (const dead of dead_users) {
 						bot.sendMessage({
-							to:role_channels.daytime,
+							to:config.role_channels.daytime,
 							message:`${bot.servers[serverID].members[dead]} was killed last night`
 						});
 					}
@@ -96,8 +61,8 @@ bot.on('ready', function(event) {
 
 // message listenner
 bot.on('message', function (user, userID, channelID, message, event) {
-if (message.startsWith(prefix)) {
-	let args = message.slice(prefix.length).split(' ');
+if (message.startsWith(config.prefix)) {
+	let args = message.slice(config.prefix.length).split(' ');
 	let command = args[0];
 
 	if(command == help.commands.howto.args[0]) {
@@ -200,23 +165,23 @@ if (message.startsWith(prefix)) {
 				color: 0x00b4fa,
 				fields: [
 					{
-						name : `${prefix}howto play`,
+						name : `${config.prefix}howto play`,
 						value : help.commands.howto.desc,
 						inline : true
 					},
 					{
-						name : `${prefix}start`,
+						name : `${config.prefix}start`,
 						value : help.commands.start.desc,
 						inline : true
 					},
 					{
-						name : `${prefix}add`,
-						value : help.commands.add.desc.replace("${prefix}", prefix),
+						name : `${config.prefix}add`,
+						value : help.commands.add.desc.replace("${prefix}", config.prefix),
 						inline : true
 					},
 					{
-						name : `${prefix}role`,
-						value : `show you the availaible roles. use ${prefix}role <role> to get info about a specific role.`,
+						name : `${config.prefix}role`,
+						value : `show you the availaible roles. use ${config.prefix}role <role> to get info about a specific role.`,
 						inline : true
 					}
 				]
@@ -291,7 +256,7 @@ if (message.startsWith(prefix)) {
 		else {
 			bot.sendMessage({
 				to:channelID,
-				message:`<:error:444107855822454786> ${args[1]} is not a valid role. use ${prefix}role *without args* to see all roles`
+				message:`<:error:444107855822454786> ${args[1]} is not a valid role. use ${config.prefix}role *without args* to see all roles`
 			}, (err, res) => {
 				if(err) throw err;
 				setTimeout(() => {
@@ -485,7 +450,7 @@ if (message.startsWith(prefix)) {
 				case 'spy':
 				case 'lone wolf':
 				bot.editChannelPermissions({
-					channelID:role_channels.werewolves,
+					channelID:config.role_channels.werewolves,
 					userID: usersID[i],
 					allow:[Discord.Permissions.TEXT_SEND_MESSAGES, Discord.Permissions.TEXT_READ_MESSAGES, Discord.Permissions.TEXT_READ_MESSAGE_HISTORY, Discord.Permissions.TEXT_ADD_REACTIONS]
 				}, (err) => {
@@ -494,7 +459,7 @@ if (message.startsWith(prefix)) {
 				break;
 				case 'witch':
 				bot.editChannelPermissions({
-					channelID:role_channels.witch,
+					channelID:config.role_channels.witch,
 					userID: usersID[i],
 					allow:[Discord.Permissions.TEXT_SEND_MESSAGES, Discord.Permissions.TEXT_READ_MESSAGES, Discord.Permissions.TEXT_READ_MESSAGE_HISTORY, Discord.Permissions.TEXT_ADD_REACTIONS]
 				}, (err) => {
@@ -503,7 +468,7 @@ if (message.startsWith(prefix)) {
 				break;
 				case 'oracle':
 				bot.editChannelPermissions({
-					channelID:role_channels.oracle,
+					channelID:config.role_channels.oracle,
 					userID: usersID[i],
 					allow:[Discord.Permissions.TEXT_SEND_MESSAGES, Discord.Permissions.TEXT_READ_MESSAGES, Discord.Permissions.TEXT_READ_MESSAGE_HISTORY, Discord.Permissions.TEXT_ADD_REACTIONS]
 				}, (err) => {
@@ -515,7 +480,7 @@ if (message.startsWith(prefix)) {
 				break;
 				case 'amor':
 				bot.editChannelPermissions({
-					channelID:role_channels.amor,
+					channelID:config.role_channels.amor,
 					userID: usersID[i],
 					allow:[Discord.Permissions.TEXT_SEND_MESSAGES, Discord.Permissions.TEXT_READ_MESSAGES, Discord.Permissions.TEXT_READ_MESSAGE_HISTORY, Discord.Permissions.TEXT_ADD_REACTIONS]
 				}, (err) => {
