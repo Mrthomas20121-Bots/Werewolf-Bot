@@ -1,15 +1,14 @@
 const shuffle = require('./helpers/shuffle');
 const Sweetcord = require('sweetcord');
-const hex_random = require('./hex_random');
 const config = require('./config/config');
 const fs = require('fs');
+const Werewolf = require('./werewolf_app');
 
+const builder = require('./config/helpBuilder');
 // file used to auth the bot, contain the bot token
 const auth = require('./auth.json');
-// info about the server
-const server = require('./server.json');
 // command and their description
-const help = require('./help.json');
+const help = require('./config/help');
 // role and their description.
 const roles = require('./role/role.json');
 
@@ -24,6 +23,7 @@ let emotes = {
 }
 // dead users array, it's used to tell the bot which users died in the game.
 let dead_users = [];
+let ww = new Werewolf(null);
 
 // daytime variable, used to determine if it's daytime or not
 let daytime = true;
@@ -46,14 +46,17 @@ bot.on('ready', function(event) {
 		});
 		// check every 5s if there anyone dead.
 		setInterval(() => {
-			if(usersID.length < 0 && dead_users.length < 0) {
-				if(daytime == true) {
-					for (const dead of dead_users) {
-						bot.sendMessage({
-							to:config.role_channels.daytime,
-							message:`${bot.servers[serverID].members[dead]} was killed last night`
-						});
-					}
+			if( (usersID.length < 0 && dead_users.length < 0) && (daytime) ) {
+				for (const dead of dead_users) {
+					bot.addToRole({
+						serverID: server.serverID,
+						userID: dead,
+						roleID: '335458298369146891'
+					});
+					bot.sendMessage({
+						to:config.role_channels.daytime,
+						message:`${bot.servers[serverID].members[dead]} was killed last night`
+					});
 				}
 			}
 		}, 5000);
@@ -65,35 +68,22 @@ if (message.startsWith(config.prefix)) {
 	let args = message.slice(config.prefix.length).split(' ');
 	let command = args[0];
 
-	if(command == help.commands.howto.args[0]) {
-		if(args[1] == help.commands.howto.args[1]) {
-			bot.sendMessage({
-				to:channelID,
-				message:help.commands.howto.text
-			});
-		}
+	if(command == help.commands[0].name) {
+		bot.sendMessage({
+			to:channelID,
+			message:help.commands[0].text
+		});
 	}
-	else if(command == 'voteAtNight') {
+	else if(command == help.commands[3].name) {
 		// werewolf decide who they want to kill
 	if(args.length > 0) {
 		let username = args[1];
 		const u = Object.values(bot.servers[server.serverID].members);
 		const obj = u.find((u) => u.username === username);
-		// when the user is dead
-		// add its id to the dead_users array 
+
+		// add the user to the dead user array
 		dead_users.push(obj.id);
 		dead = obj.id;
-		// add the dead role to the new dead player
-		bot.addToRole({
-			serverID: server.serverID,
-			userID: obj.id,
-			roleID: '335458298369146891'
-		});
-
-		bot.sendMessage({
-				to: channelID,
-				message: `${obj.username} was killed last night.`
-			});
 		}
 	}
 	else if(command == 'perm') {
@@ -158,36 +148,7 @@ if (message.startsWith(config.prefix)) {
 		}
 	}
 	else if(command == 'help') {
-		bot.sendMessage({
-			to: channelID,
-			embed: {
-				title: 'Help',
-				color: 0x00b4fa,
-				fields: [
-					{
-						name : `${config.prefix}howto play`,
-						value : help.commands.howto.desc,
-						inline : true
-					},
-					{
-						name : `${config.prefix}start`,
-						value : help.commands.start.desc,
-						inline : true
-					},
-					{
-						name : `${config.prefix}add`,
-						value : help.commands.add.desc.replace("${prefix}", config.prefix),
-						inline : true
-					},
-					{
-						name : `${config.prefix}role`,
-						value : `show you the availaible roles. use ${config.prefix}role <role> to get info about a specific role.`,
-						inline : true
-					}
-				]
-			}             
-		});
-
+		bot.sendMessage(builder.Show(channelID, config.prefix));
 	}
 	else if(command == 'role') {
 		if(args.length == 1){

@@ -8,7 +8,10 @@ function hex_random(len=5) {
 }
 function randomInt(min,max)
 {
-    return Math.floor(Math.random()*(max-min+1)+min);
+    return Math.floor(Math.random()*(max-min)+min);
 }
 
-module.exports = hex_random;
+module.exports = {
+  hex_random,
+  randomInt
+};
