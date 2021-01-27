@@ -27,7 +27,8 @@ class Werewolf
    */
   addPlayers(players)
   {
-    let roles = this.getRoles(players)
+    this.players = players;
+    let roles = this.getRoles()
     for (let i = 0; i < players.length; i++)
     {
       this.addPlayer(players[i], roles[i])
@@ -43,13 +44,12 @@ class Werewolf
     this.playersRoles.set(player.id, role)
   }
   /**
-   * 
-   * @param {Player[]} players 
+   * get roles
    */
-  getRoles(players)
+  getRoles()
   {
     let roles = ['witch', 'hunter', 'villager', 'werewolf', 'oracle', 'werewolf', 'lone_wolf', 'werewolf', 'werewolf', 'spy', 'hunter', 'amor', 'villager', 'villager', 'werewolf', 'villager', 'villager', 'villager', 'villager', 'werewolf']
-    return shuffle(roles.slice(0, players.length))
+    return shuffle(roles.slice(0, this.players.length))
   }
   /**
    * @returns {Player[]}

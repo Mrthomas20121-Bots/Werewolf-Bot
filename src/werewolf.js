@@ -23,7 +23,6 @@ let emotes = {
 }
 // dead users array, it's used to tell the bot which users died in the game.
 let dead_users = [];
-let ww = new Werewolf(null);
 
 // daytime variable, used to determine if it's daytime or not
 let daytime = true;
@@ -35,15 +34,15 @@ const bot = new Sweetcord.SweetClient({
 });
 
 bot.on('ready', function(event) {
-		// send a message in the chat when the bot is ready
-    console.log('Logged in as %s - %s\n', bot.username, bot.id);
+	// send a message in the chat when the bot is ready
+	console.log('Logged in as %s - %s\n', bot.username, bot.id);
     bot.setPresence({
-      game: {
-        name: `the sound of silence || ${config.prefix}help`,
-        type: '2', // type '2' is listenning to
-        url: null // not setting a url
-      }
-		});
+        game: {
+            name: `the sound of silence || ${config.prefix}help`,
+            type: '2', // type '2' is listenning to
+            url: null // not setting a url
+		}
+	});
 		// check every 5s if there anyone dead.
 		setInterval(() => {
 			if( (usersID.length < 0 && dead_users.length < 0) && (daytime) ) {
