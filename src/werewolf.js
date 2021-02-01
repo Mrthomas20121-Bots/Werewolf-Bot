@@ -1,16 +1,17 @@
-const shuffle = require('./helpers/shuffle');
-const Sweetcord = require('sweetcord');
-const config = require('./config/config');
+const shuffle = require('./utils/shuffle')
+const Sweetcord = require('sweetcord')
+const config = require('./config/config')
 const fs = require('fs');
-const Werewolf = require('./werewolf_app');
+const Werewolf = require('./werewolf_app')
 
-const builder = require('./config/helpBuilder');
+
+const builder = require('./config/helpBuilder')
 // file used to auth the bot, contain the bot token
-const auth = require('./auth.json');
+const auth = require('./auth.json')
 // command and their description
-const help = require('./config/help');
+const help = require('./config/help')
 // role and their description.
-const roles = require('./role/role.json');
+const roles = require('./role/role.json')
 
 // array of userID
 let usersID = [];
@@ -30,7 +31,8 @@ let daytime = true;
 // Initialize Discord Bot
 const bot = new Sweetcord.SweetClient({
 	token: auth.token,
-	autorun: true
+	autorun: true,
+	prefix:config.prefix
 });
 
 bot.on('ready', function(event) {
@@ -38,7 +40,7 @@ bot.on('ready', function(event) {
 	console.log('Logged in as %s - %s\n', bot.username, bot.id);
     bot.setPresence({
         game: {
-            name: `the sound of silence || ${config.prefix}help`,
+            name: `the sound of silence || ${bot.prefix}help`,
             type: '2', // type '2' is listenning to
             url: null // not setting a url
 		}
@@ -63,7 +65,7 @@ bot.on('ready', function(event) {
 
 // message listenner
 bot.on('message', function (user, userID, channelID, message, event) {
-if (message.startsWith(config.prefix)) {
+if (message.startsWith(bot.prefix)) {
 	let args = message.slice(config.prefix.length).split(' ');
 	let command = args[0];
 

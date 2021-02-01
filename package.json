@@ -9,11 +9,10 @@
   "author": "Mrthomas20121",
   "license": "ISC",
   "dependencies": {
-    "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+    "eris": "^0.14.0",
     "fs": "0.0.1-security",
     "git": "^0.1.5",
     "mime": "^1.4.1",
-    "sweetcord": "^1.0.4",
     "winston": "^2.3.1"
   }
 }

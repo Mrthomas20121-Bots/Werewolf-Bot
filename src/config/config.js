@@ -11,5 +11,11 @@ module.exports = {
   },
   help:{
     inline:false
-  }
+  },
+  commands: [
+    'help',
+    'roleList',
+    'role',
+    'start'
+  ]
 }
