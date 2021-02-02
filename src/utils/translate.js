@@ -24,9 +24,7 @@ module.exports = {
                 converted_string = converted_string.replace('%s', param)
             }
         }
-        else {
-            return converted_string
-        }
+        return converted_string;
     }
 }
 

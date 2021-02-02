@@ -108,8 +108,104 @@ lobbyCommand.registerSubcommand('join', (message, args) => {
     bot.createMessage(message.channel.id, translate.convert_string('message.player.join_lobby', message.author.username))
 }, {
    description: translate.convert('command.join_lobby.description'),
-   fullDescription: translate.convert('command.join_lobby.full_description'),
-   usage: '@user'
+   fullDescription: translate.convert('command.join_lobby.full_description')
+})
+
+let role = bot.registerCommand('role', (message, args) => {}, {
+    description: translate.convert('command.role.description'),
+    fullDescription: translate.convert('command.role.description'),
+    usage: '<list> || <view> <role name>'
+})
+
+role.registerSubcommand('list', (message, args) => {
+
+    let arr = []
+    let roles = [
+        'werewolf', 
+        'hunter',
+        'witch',
+        'healer',
+        'oracle',
+        'amor',
+        'spy',
+        'lonewolf',
+        'villager',
+    ]
+
+    roles.forEach((value) => {
+        arr.push({
+            name:translate.convert(`role.${value}.name`),
+            value:translate.convert(`role.${value}.desc`)
+        })
+    })
+
+    bot.createMessage(message.channel.id, {
+        embed:{
+            color:parseInt(hex.hex_random(5), 16),
+            description:translate.convert('command.role.list.description'),
+            fields:arr,
+            timestamp:new Date(),
+            footer:{
+                icon_url:'',
+                text:'Werewolf Bot'
+            }
+        }
+    })
+}, {
+    description: translate.convert('command.role.list.description'),
+    fullDescription: translate.convert('command.role.list.description'),
+    aliases:['l']
+})
+
+role.registerSubcommand('view', (message, args) => {
+
+    let roles = [
+        'werewolf', 
+        'hunter',
+        'witch',
+        'healer',
+        'oracle',
+        'amor',
+        'spy',
+        'lonewolf',
+        'villager',
+    ]
+
+    if(!roles.includes(args[0])) {
+        bot.createMessage(message.channel.id, translate.convert_string('error.not_found', 'Role', args[0])).then(
+            (value) => {
+                setTimeout(() => {
+                    value.delete()
+                }, 5000)
+            }
+        ).catch((reason) => { console.log(reason)})
+    }
+
+    else {
+        bot.createMessage(message.channel.id, {
+            embed:{
+                color:parseInt(hex.hex_random(5), 16),
+                description:translate.convert('command.role.view.description'),
+                fields:[
+                    {
+                        name:translate.convert(`role.${args[0]}.name`),
+                        value:translate.convert(`role.${args[0]}.desc`)
+                    }
+                ],
+                timestamp:new Date(),
+                footer:{
+                    icon_url:'',
+                    text:'Werewolf Bot'
+                }
+            }
+        })
+    }
+}, {
+    description: translate.convert('command.role.view.description'),
+    fullDescription: translate.convert('command.role.view.description'),
+    argsRequired:true,
+    aliases:['see', 'v', 's'],
+    usage:'<role name>'
 })
 
 bot.connect()

@@ -1,7 +1,7 @@
 module.exports = {
     // bot errors
     'error.arguments': 'Error %s arguments given, Expected %s arguments.',
-    'error.command.not_found': 'Error, Command %s not found!',
+    'error.not_found': 'Error, %s %s not found!',
     'error.command.invalid': 'Error, Invalid Usage of the command!',
 
     // commands
@@ -10,6 +10,9 @@ module.exports = {
     'command.join_lobby.full_description': 'Join a Werewolf lobby',
     'command.create_lobby.description': 'Create a lobby',
     'command.create_lobby.full_description': 'Create a lobby with a name. React to join the current lobby or use the command joinLobby <Lobby Name> to join said lobby',
+    'command.role.description': 'Role command.',
+    'command.role.list.description': 'List available roles and what they do.',
+    'command.role.view.description': 'View a role.',
     
     // messages
     'message.player.role': '%s role was %s.',
