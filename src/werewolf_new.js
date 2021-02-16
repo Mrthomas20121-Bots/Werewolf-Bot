@@ -5,6 +5,7 @@ const config = require('./config/config')
 
 // utils
 const shuffle = require('./utils/shuffle')
+const permUtils = require('./utils/permUtils')
 const translate = require('./utils/translate')
 const hex = require('./utils/hex_random')
 const LobbyCreator = require('./lobby')
@@ -28,12 +29,12 @@ const bot = new Eris.CommandClient(auth.token, {}, {
     description:'a Werewolf bot',
     owner:'Mrthomas20121',
     prefix:config.prefix
-});
+})
 
 // when the bot is ready
 bot.on('ready', function() {
 	// send a message in the chat when the bot is ready
-	console.log('Ready!')
+	console.log('Ready!\n')
     bot.editStatus('online', {
         name: `the sound of silence || ${config.prefix}help`,
         type: 2 // type '2' is listenning to
@@ -180,7 +181,6 @@ role.registerSubcommand('view', (message, args) => {
             }
         ).catch((reason) => { console.log(reason)})
     }
-
     else {
         bot.createMessage(message.channel.id, {
             embed:{
@@ -206,6 +206,25 @@ role.registerSubcommand('view', (message, args) => {
     argsRequired:true,
     aliases:['see', 'v', 's'],
     usage:'<role name>'
+})
+
+bot.registerCommand('checkForDead', (message, args) => {
+    if(!play) return;
+    else if(users.length > 0) {
+        let filtered_users = users.filter((value) => value.dead)
+        if(day) {
+            for(const user of filtered_users) {
+                // add dead role to user
+                bot.addGuildMemberRole(config.serverID, user.id, '335458298369146891', 'User is dead').then(() => {
+                    bot.editChannelPermission(config.channels.last_will, user.id, permUtils.readAndWrite(), 0, 'member')
+                })
+                bot.createMessage(config.role_channels.daytime, translate.convert('message.player.dead_at_night'))
+            }
+        }
+    }
+}, {
+    description:translate.convert('command.check_for_dead.description'),
+    fullDescription:translate.convert('command.check_for_dead.description')
 })
 
 bot.connect()

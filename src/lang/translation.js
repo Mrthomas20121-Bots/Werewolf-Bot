@@ -13,6 +13,7 @@ module.exports = {
     'command.role.description': 'Role command.',
     'command.role.list.description': 'List available roles and what they do.',
     'command.role.view.description': 'View a role.',
+    'command.check_for_dead.description': 'Check if someone died this night.',
     
     // messages
     'message.player.role': '%s role was %s.',
