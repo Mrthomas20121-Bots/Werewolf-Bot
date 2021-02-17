@@ -212,7 +212,7 @@ bot.registerCommand('checkForDead', (message, args) => {
     if(!play) return;
     else if(users.length > 0) {
         let filtered_users = users.filter((value) => value.dead)
-        if(day) {
+        if(day && filtered_users.length > 0) {
             for(const user of filtered_users) {
                 // add dead role to user
                 bot.addGuildMemberRole(config.serverID, user.id, '335458298369146891', 'User is dead').then(() => {
