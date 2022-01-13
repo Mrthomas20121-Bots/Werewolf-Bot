@@ -1,11 +1,3 @@
-module.exports = {
-    block,
-    readOnly,
-    readAndWrite,
-    attach_file,
-    perms
-}
-
 function block() {
     return readAndWrite()
 }
@@ -57,3 +49,11 @@ let perms = {
     voiceUseVAD: 0x2000000,
     voicePrioritySpeaker: 0x100
 };
+
+module.exports = {
+    block,
+    readOnly,
+    readAndWrite,
+    attach_file,
+    perms
+}
