@@ -10,9 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "eris": "^0.14.0",
-    "fs": "0.0.1-security",
-    "git": "^0.1.5",
-    "mime": "^1.4.1",
-    "winston": "^2.3.1"
+    "void-list": "^1.0.3"
   }
 }
