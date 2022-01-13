@@ -4,7 +4,6 @@ const config = require('./config/config')
 const fs = require('fs');
 const Werewolf = require('./werewolf_app')
 
-
 const builder = require('./config/helpBuilder')
 // file used to auth the bot, contain the bot token
 const auth = require('./auth.json')
