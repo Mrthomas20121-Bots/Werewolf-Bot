@@ -1,8 +1,14 @@
 const List = require('void-list')
 const roleUtils = require('./roleUtils')
 
-class Game {
+module.exports = class Game {
+    /**
+     * @type {List<String>}
+     */
     #players = new List()
+    /**
+     * @type {List<String>}
+     */
     #roles = new List()
 
     /**
@@ -28,5 +34,16 @@ class Game {
                 dead:false
             })
         }
+    }
+
+    save() {
+
+        let json = {
+            players:[]
+        }
+
+        this.#playerData.forEach((player, role) => {
+
+        })
     }
 }

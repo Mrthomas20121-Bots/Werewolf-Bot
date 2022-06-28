@@ -1,4 +1,5 @@
 const Eris = require('eris')
+const List = require('void-list')
 
 // config
 const config = require('./config/config')
@@ -8,7 +9,7 @@ const shuffle = require('./utils/shuffle')
 const permUtils = require('./utils/permUtils')
 const translate = require('./utils/translate')
 const hex = require('./utils/hex_random')
-const LobbyCreator = require('./lobby')
+const Game = require('./utils/game')
 
 // auth.token to get the token
 const auth = require('./auth.json')
@@ -22,11 +23,16 @@ let play = false
 let users = []
 
 // lobbies
-let lobbies = new LobbyCreator()
+let lobbies = new List()
+
+/**
+ * @type {Map<String,Game>}
+ */
+let games = new Map()
 
 // discord bot instance
 const bot = new Eris.CommandClient(auth.token, {}, {
-    description:'a Werewolf bot',
+    description:'play Werewolf the game inside Discord!',
     owner:'Mrthomas20121',
     prefix:config.prefix
 })
@@ -34,9 +40,9 @@ const bot = new Eris.CommandClient(auth.token, {}, {
 // when the bot is ready
 bot.on('ready', function() {
 	// send a message in the chat when the bot is ready
-	console.log('Ready!\n')
+	console.log('Bot is ready!\n')
     bot.editStatus('online', {
-        name: `the sound of silence || ${config.prefix}help`,
+        name: `myself || ${config.prefix}help`,
         type: 2 // type '2' is listenning to
     })
     
@@ -55,6 +61,13 @@ bot.on('ready', function() {
     //     }
     // }, 5000)
 })
+
+bot.on('disconnect', () => {
+    
+})
+
+bot.connect()
+
 const lobbyCommand = bot.registerCommand('lobby', (message, args) => {}, {
     description:translate.convert('command.lobby.description'),
     fullDescription:translate.convert('command.lobby.description')
@@ -62,7 +75,8 @@ const lobbyCommand = bot.registerCommand('lobby', (message, args) => {}, {
 
 lobbyCommand.registerSubcommand('create', (message, args) => {
     if(args.length != 0) {
-        lobbies.addLobby(args[0])
+        lobbies.add(args[0])
+        games.set(args[0], new Game())
         // message with the reaction
         return translate.convert_string('message.lobby.join', args[0])
     }
@@ -70,7 +84,7 @@ lobbyCommand.registerSubcommand('create', (message, args) => {
     description: translate.convert('command.create_lobby.description'),
     fullDescription: translate.convert('command.create_lobby.full_description'),
     argsRequired:true,
-    invalidUsageMessage:  translate.convert('error.command.invalid'),
+    invalidUsageMessage: translate.convert('error.command.invalid'),
     usage:'<lobby>',
     reactionButtonTimeout:50000,
     reactionButtons: [
@@ -88,11 +102,11 @@ lobbyCommand.registerSubcommand('create', (message, args) => {
                                 id:u.id,
                                 dead:false
                             })
-                            bot.createMessage(msg.channel.id, translate.convert_string('message.player.join_lobby', u.username))
+                            bot.createMessage(msg.channel.id, translate.convert_string('message.lobby.joined', u.username))
                         }
                         else {
                             users.splice(index, 1)
-                            bot.createMessage(msg.channel.id, translate.convert_string('message.player.left_lobby', u.username))
+                            bot.createMessage(msg.channel.id, translate.convert_string('message.lobby.joined', u.username))
                         }
                     }
                 })
@@ -226,5 +240,3 @@ bot.registerCommand('checkForDead', (message, args) => {
     description:translate.convert('command.check_for_dead.description'),
     fullDescription:translate.convert('command.check_for_dead.description')
 })
-
-bot.connect()

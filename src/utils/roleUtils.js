@@ -7,6 +7,7 @@ module.exports = {
 /**
  * get the roles list then shuffle it.
  * @param {number} players 
+ * @returns {String[]}
  */
 function getRoles(players) {
     let roleArr = [
