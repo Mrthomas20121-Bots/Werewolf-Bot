@@ -9,8 +9,8 @@
   "author": "Mrthomas20121",
   "license": "ISC",
   "dependencies": {
-    "eris": "^0.14.2",
+    "eris": "^0.17.2",
     "void-config": "^1.0.0",
-    "void-list": "^1.0.9"
+    "void-list": "^1.1.4"
   }
 }
