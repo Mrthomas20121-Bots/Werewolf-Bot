@@ -1,3 +1,4 @@
 # Werewolf-Bot
-Werewolf bot is a discord bot that let you play the Werewolf game. require at least 6 players. 
-This Bot is written using Eris.js.
+Werewolf bot is a discord bot based on the werewolf/mafia game.
+## requirement
+- require at least 6 players with a max of 21 players.
