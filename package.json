@@ -2,7 +2,7 @@
   "name": "werewolf",
   "version": "1.0.1",
   "description": "By Mrthomas20121",
-  "main": "werewolf.js",
+  "main": "src/werewolf.js",
   "scripts": {
     "test": "node ./werewolf.js"
   },
@@ -11,6 +11,7 @@
   "dependencies": {
     "eris": "^0.17.2",
     "void-config": "^1.0.0",
-    "void-list": "^1.1.4"
+    "void-list": "^1.1.4",
+    "void-logger": "^2.0.0"
   }
 }

@@ -1,4 +1,4 @@
-function hex_random(len=5) {
+function randomHexColor(len=6) {
   let arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f'];
   let result = ''
   for (let i = 0; i < len; i++) {
@@ -12,6 +12,6 @@ function randomInt(min,max)
 }
 
 module.exports = {
-  hex_random,
+  randomHexColor,
   randomInt
 };
