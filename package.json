@@ -10,8 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "eris": "^0.17.2",
+    "hashids": "^2.3.0",
     "void-config": "^1.0.0",
-    "void-list": "^1.1.4",
-    "void-logger": "^2.0.0"
+    "void-list": "^1.1.5",
+    "void-logger": "^2.0.0",
+    "void-map": "^0.0.6"
   }
 }
