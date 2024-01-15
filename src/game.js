@@ -20,6 +20,6 @@ class Game {
      * @param {string[]} players 
      */
     constructor(players) {
-        this.playerMap = new VoidMap().from<String, string>(List.fromArray(players), List.fromArray(players).map((value, i) => Hash.DEFAULT.encode(value.charCodeAt(0), i)));
+        this.playerMap = new VoidMap().from<string, string>(List.fromArray(players), List.fromArray(players).map((value, i) => Hash.DEFAULT.encode(value.charCodeAt(0), i)));
     }
 }
